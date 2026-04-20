@@ -1,0 +1,25 @@
+export interface StcgLtcg {
+  gain: number;
+  balance: number;
+}
+
+export interface Holding {
+  coin: string;
+  coinName: string;
+  logo: string;
+  totalHolding: number;
+  avgBuyPrice: number;
+  currentPrice: number;
+  stcg: StcgLtcg;
+  ltcg: StcgLtcg;
+}
+
+export interface CapitalGainsBreakdown {
+  profits: number;
+  losses: number;
+}
+
+export interface CapitalGains {
+  stcg: CapitalGainsBreakdown;
+  ltcg: CapitalGainsBreakdown;
+}
