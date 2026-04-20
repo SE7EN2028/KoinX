@@ -23,7 +23,7 @@ function AppContent() {
   const error = holdingsError || gainsError;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0B0F1A] transition-colors duration-300 flex flex-col">
+    <div className="min-h-screen bg-[#F0F3F8] dark:bg-[#0B0F1A] transition-colors duration-300 flex flex-col">
       <header className="bg-white dark:bg-[#131829] border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
           <div className="w-8 h-8 bg-koinx-blue rounded-lg flex items-center justify-center shrink-0">
