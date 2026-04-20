@@ -35,12 +35,12 @@ export function HoldingsTable({ holdings }: Props) {
 
   return (
     <div className="bg-white dark:bg-[#131829] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden transition-colors duration-300">
-      <div className="flex items-center gap-1 px-4 pt-4 pb-2">
+      <div className="flex items-center gap-1 px-3 sm:px-4 pt-3 sm:pt-4 pb-2 overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => { setTermFilter(tab.key); setShowAll(false); }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap ${
               termFilter === tab.key
                 ? 'bg-koinx-blue text-white'
                 : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5'

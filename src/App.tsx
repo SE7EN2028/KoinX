@@ -20,12 +20,12 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0B0F1A] transition-colors duration-300">
       <header className="bg-white dark:bg-[#131829] border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-3">
-          <div className="w-8 h-8 bg-koinx-blue rounded-lg flex items-center justify-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
+          <div className="w-8 h-8 bg-koinx-blue rounded-lg flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">K</span>
           </div>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">KoinX</h1>
-          <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">Tax Loss Harvesting</span>
+          <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">KoinX</h1>
+          <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">Tax Loss Harvesting</span>
           <div className="ml-auto">
             <ThemeToggle />
           </div>
