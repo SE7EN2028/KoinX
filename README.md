@@ -4,7 +4,7 @@
    
   ## Live Demo                                                                                                                                                                                                       
                                                             
-  [Deployed Link](#) _(update after deployment)_                                                                                                                                                                     
+  [Deployed Link]](https://koin-x-theta-five.vercel.app/)                                                                                                                                                                    
    
   ## Tech Stack                                                                                                                                                                                                      
                                                             
