@@ -1,6 +1,6 @@
 import type { Holding } from '../types';
 
-const mockHoldings: Holding[] = [
+const rawHoldings = [
   {
     coin: "USDC",
     coinName: "USDC",
@@ -72,7 +72,7 @@ const mockHoldings: Holding[] = [
     ltcg: { balance: 0, gain: 0 }
   },
   {
-    coin: "USDC2",
+    coin: "USDC",
     coinName: "Bridged USDC (Polygon PoS Bridge)",
     logo: "https://coin-images.coingecko.com/coins/images/33000/large/usdc.png?1700119918",
     currentPrice: 85.41,
@@ -252,6 +252,11 @@ const mockHoldings: Holding[] = [
     ltcg: { balance: 0, gain: 0 }
   }
 ];
+
+const mockHoldings: Holding[] = rawHoldings.map((h, i) => ({
+  ...h,
+  id: `${h.coin}-${i}`,
+}));
 
 export function fetchHoldings(): Promise<Holding[]> {
   return new Promise((resolve) => {

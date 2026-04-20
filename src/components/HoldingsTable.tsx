@@ -21,7 +21,7 @@ export function HoldingsTable({ holdings }: Props) {
   const { watchlist } = useWatchlist();
 
   const filteredHoldings = holdings.filter((h) => {
-    if (watchlistOnly && !watchlist.has(h.coin)) return false;
+    if (watchlistOnly && !watchlist.has(h.id)) return false;
     if (termFilter === 'short') return h.stcg.gain !== 0 || h.stcg.balance > 0;
     if (termFilter === 'long') return h.ltcg.gain !== 0 || h.ltcg.balance > 0;
     return true;
@@ -99,10 +99,10 @@ export function HoldingsTable({ holdings }: Props) {
             ) : (
               visibleHoldings.map((holding) => (
                 <HoldingRow
-                  key={holding.coin}
+                  key={holding.id}
                   holding={holding}
-                  selected={selectedHoldings.has(holding.coin)}
-                  onToggle={() => toggleHolding(holding.coin)}
+                  selected={selectedHoldings.has(holding.id)}
+                  onToggle={() => toggleHolding(holding.id)}
                   termFilter={termFilter}
                 />
               ))

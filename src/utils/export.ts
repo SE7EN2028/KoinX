@@ -40,7 +40,7 @@ export function exportToCSV(
   lines.push('=== Holdings ===');
   lines.push('Coin,Name,Total Holding,Avg Buy Price,Current Price,STCG Gain,LTCG Gain,Selected');
   for (const h of holdings) {
-    lines.push(`${h.coin},${h.coinName},${h.totalHolding},${sym}${convertValue(h.averageBuyPrice, currency)},${sym}${convertValue(h.currentPrice, currency)},${sym}${convertValue(h.stcg.gain, currency)},${sym}${convertValue(h.ltcg.gain, currency)},${selectedCoins.has(h.coin) ? 'Yes' : 'No'}`);
+    lines.push(`${h.coin},${h.coinName},${h.totalHolding},${sym}${convertValue(h.averageBuyPrice, currency)},${sym}${convertValue(h.currentPrice, currency)},${sym}${convertValue(h.stcg.gain, currency)},${sym}${convertValue(h.ltcg.gain, currency)},${selectedCoins.has(h.id) ? 'Yes' : 'No'}`);
   }
 
   const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
@@ -67,7 +67,7 @@ export function exportToPDF(
     ? (postGains.stcg.profits - postGains.stcg.losses) + (postGains.ltcg.profits - postGains.ltcg.losses)
     : preNet;
 
-  const selectedHoldings = holdings.filter((h) => selectedCoins.has(h.coin));
+  const selectedHoldings = holdings.filter((h) => selectedCoins.has(h.id));
 
   const html = `
     <html><head><title>KoinX Tax Harvesting Report</title>

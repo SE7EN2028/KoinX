@@ -4,7 +4,7 @@ import { calculateAfterHarvesting, getRealisedGains } from '../utils/calculation
 
 interface HarvestingContextType {
   selectedHoldings: Set<string>;
-  toggleHolding: (coin: string) => void;
+  toggleHolding: (id: string) => void;
   toggleAll: (holdings: Holding[]) => void;
   afterHarvesting: CapitalGains | null;
   preRealisedGains: number;
@@ -25,13 +25,13 @@ export function HarvestingProvider({
 }) {
   const [selectedHoldings, setSelectedHoldings] = useState<Set<string>>(new Set());
 
-  const toggleHolding = (coin: string) => {
+  const toggleHolding = (id: string) => {
     setSelectedHoldings((prev) => {
       const next = new Set(prev);
-      if (next.has(coin)) {
-        next.delete(coin);
+      if (next.has(id)) {
+        next.delete(id);
       } else {
-        next.add(coin);
+        next.add(id);
       }
       return next;
     });
@@ -42,12 +42,12 @@ export function HarvestingProvider({
       if (prev.size === allHoldings.length) {
         return new Set();
       }
-      return new Set(allHoldings.map((h) => h.coin));
+      return new Set(allHoldings.map((h) => h.id));
     });
   };
 
   const selectedHoldingsList = useMemo(
-    () => holdings.filter((h) => selectedHoldings.has(h.coin)),
+    () => holdings.filter((h) => selectedHoldings.has(h.id)),
     [holdings, selectedHoldings]
   );
 

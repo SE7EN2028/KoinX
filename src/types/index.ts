@@ -4,6 +4,7 @@ export interface StcgLtcg {
 }
 
 export interface Holding {
+  id: string;
   coin: string;
   coinName: string;
   logo: string;
