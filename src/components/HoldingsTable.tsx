@@ -4,6 +4,8 @@ import { useHarvesting } from '../context/HarvestingContext';
 import { HoldingRow } from './HoldingRow';
 import { Checkbox } from './ui/Checkbox';
 
+type TermFilter = 'all' | 'short' | 'long';
+
 interface Props {
   holdings: Holding[];
 }
@@ -12,14 +14,42 @@ const INITIAL_VISIBLE = 5;
 
 export function HoldingsTable({ holdings }: Props) {
   const [showAll, setShowAll] = useState(false);
+  const [termFilter, setTermFilter] = useState<TermFilter>('all');
   const { selectedHoldings, toggleHolding, toggleAll } = useHarvesting();
 
-  const visibleHoldings = showAll ? holdings : holdings.slice(0, INITIAL_VISIBLE);
+  const filteredHoldings = holdings.filter((h) => {
+    if (termFilter === 'short') return h.stcg.gain !== 0 || h.stcg.balance > 0;
+    if (termFilter === 'long') return h.ltcg.gain !== 0 || h.ltcg.balance > 0;
+    return true;
+  });
+
+  const visibleHoldings = showAll ? filteredHoldings : filteredHoldings.slice(0, INITIAL_VISIBLE);
   const allSelected = holdings.length > 0 && selectedHoldings.size === holdings.length;
   const someSelected = selectedHoldings.size > 0 && !allSelected;
 
+  const tabs: { key: TermFilter; label: string }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'short', label: 'Short Term' },
+    { key: 'long', label: 'Long Term' },
+  ];
+
   return (
     <div className="bg-white dark:bg-[#131829] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden transition-colors duration-300">
+      <div className="flex items-center gap-1 px-4 pt-4 pb-2">
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => { setTermFilter(tab.key); setShowAll(false); }}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+              termFilter === tab.key
+                ? 'bg-koinx-blue text-white'
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm min-w-[800px]">
           <thead>
@@ -34,8 +64,12 @@ export function HoldingsTable({ holdings }: Props) {
               <th className="py-3 px-3 text-left">Asset</th>
               <th className="py-3 px-3 text-right">Holdings</th>
               <th className="py-3 px-3 text-right">Current Price</th>
-              <th className="py-3 px-3 text-right">Short Term</th>
-              <th className="py-3 px-3 text-right">Long Term</th>
+              {(termFilter === 'all' || termFilter === 'short') && (
+                <th className="py-3 px-3 text-right">Short Term</th>
+              )}
+              {(termFilter === 'all' || termFilter === 'long') && (
+                <th className="py-3 px-3 text-right">Long Term</th>
+              )}
               <th className="py-3 px-3 text-right">Amount to Sell</th>
             </tr>
           </thead>
@@ -46,18 +80,19 @@ export function HoldingsTable({ holdings }: Props) {
                 holding={holding}
                 selected={selectedHoldings.has(holding.coin)}
                 onToggle={() => toggleHolding(holding.coin)}
+                termFilter={termFilter}
               />
             ))}
           </tbody>
         </table>
       </div>
-      {holdings.length > INITIAL_VISIBLE && (
+      {filteredHoldings.length > INITIAL_VISIBLE && (
         <div className="border-t border-gray-200 dark:border-gray-800 px-4 py-3 text-center">
           <button
             onClick={() => setShowAll(!showAll)}
             className="text-koinx-blue text-sm font-medium hover:underline cursor-pointer"
           >
-            {showAll ? 'View Less' : `View All (${holdings.length})`}
+            {showAll ? 'View Less' : `View All (${filteredHoldings.length})`}
           </button>
         </div>
       )}
