@@ -46,7 +46,7 @@ export function HoldingRow({ holding, selected, onToggle, termFilter }: Props) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => toggleWatchlist(holding.id)}
-            className="text-lg cursor-pointer hover:scale-110 transition-transform shrink-0"
+            className={`text-lg cursor-pointer hover:scale-110 transition-transform shrink-0 ${watched ? 'text-amber-400' : 'text-gray-400 dark:text-gray-500 hover:text-amber-300'}`}
           >
             {watched ? '★' : '☆'}
           </button>
