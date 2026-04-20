@@ -11,17 +11,17 @@ interface Props {
 function GainCell({ gain, balance }: { gain: number; balance: number }) {
   return (
     <td className="py-4 px-3 text-right">
-      <div className={`font-medium ${gain > 0 ? 'text-koinx-green' : gain < 0 ? 'text-koinx-red' : 'text-gray-900'}`}>
+      <div className={`font-medium ${gain > 0 ? 'text-koinx-green' : gain < 0 ? 'text-koinx-red' : 'text-gray-900 dark:text-gray-100'}`}>
         {formatCurrency(gain)}
       </div>
-      <div className="text-xs text-gray-500">{formatCryptoAmount(balance)}</div>
+      <div className="text-xs text-gray-500 dark:text-gray-400">{formatCryptoAmount(balance)}</div>
     </td>
   );
 }
 
 export function HoldingRow({ holding, selected, onToggle }: Props) {
   return (
-    <tr className={`border-t border-gray-100 hover:bg-gray-50 transition-colors ${selected ? 'bg-blue-50/50' : ''}`}>
+    <tr className={`border-t border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors ${selected ? 'bg-blue-50/50 dark:bg-blue-900/15' : ''}`}>
       <td className="py-4 px-3">
         <Checkbox checked={selected} onChange={onToggle} />
       </td>
@@ -36,21 +36,21 @@ export function HoldingRow({ holding, selected, onToggle }: Props) {
             }}
           />
           <div>
-            <div className="font-medium text-gray-900">{holding.coin}</div>
-            <div className="text-xs text-gray-500">{holding.coinName}</div>
+            <div className="font-medium text-gray-900 dark:text-white">{holding.coin}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">{holding.coinName}</div>
           </div>
         </div>
       </td>
       <td className="py-4 px-3 text-right">
-        <div className="font-medium text-gray-900">{formatCryptoAmount(holding.totalHolding)}</div>
-        <div className="text-xs text-gray-500">{formatCurrency(holding.avgBuyPrice)}</div>
+        <div className="font-medium text-gray-900 dark:text-white">{formatCryptoAmount(holding.totalHolding)}</div>
+        <div className="text-xs text-gray-500 dark:text-gray-400">{formatCurrency(holding.avgBuyPrice)}</div>
       </td>
-      <td className="py-4 px-3 text-right font-medium text-gray-900">
+      <td className="py-4 px-3 text-right font-medium text-gray-900 dark:text-white">
         {formatCurrency(holding.currentPrice)}
       </td>
       <GainCell gain={holding.stcg.gain} balance={holding.stcg.balance} />
       <GainCell gain={holding.ltcg.gain} balance={holding.ltcg.balance} />
-      <td className="py-4 px-3 text-right font-medium text-gray-900">
+      <td className="py-4 px-3 text-right font-medium text-gray-900 dark:text-white">
         {selected ? formatCryptoAmount(holding.totalHolding) : '-'}
       </td>
     </tr>

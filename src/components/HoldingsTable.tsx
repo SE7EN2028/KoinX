@@ -19,11 +19,11 @@ export function HoldingsTable({ holdings }: Props) {
   const someSelected = selectedHoldings.size > 0 && !allSelected;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-white dark:bg-[#131829] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden transition-colors duration-300">
       <div className="overflow-x-auto">
         <table className="w-full text-sm min-w-[800px]">
           <thead>
-            <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+            <tr className="bg-gray-50 dark:bg-[#1A1F36] text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
               <th className="py-3 px-3 text-left w-10">
                 <Checkbox
                   checked={allSelected}
@@ -52,7 +52,7 @@ export function HoldingsTable({ holdings }: Props) {
         </table>
       </div>
       {holdings.length > INITIAL_VISIBLE && (
-        <div className="border-t border-gray-200 px-4 py-3 text-center">
+        <div className="border-t border-gray-200 dark:border-gray-800 px-4 py-3 text-center">
           <button
             onClick={() => setShowAll(!showAll)}
             className="text-koinx-blue text-sm font-medium hover:underline cursor-pointer"

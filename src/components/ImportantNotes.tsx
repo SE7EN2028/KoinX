@@ -12,17 +12,17 @@ export function ImportantNotes() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="bg-amber-50 border border-amber-200 rounded-xl overflow-hidden">
+    <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-xl overflow-hidden transition-colors duration-300">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full px-6 py-4 flex items-center justify-between text-left cursor-pointer hover:bg-amber-100/50 transition-colors"
+        className="w-full px-6 py-4 flex items-center justify-between text-left cursor-pointer hover:bg-amber-100/50 dark:hover:bg-amber-900/20 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <span className="text-amber-600 text-lg">&#9888;</span>
-          <span className="font-semibold text-gray-900">Important Notes & Disclaimers</span>
+          <span className="text-amber-600 dark:text-amber-400 text-lg">&#9888;</span>
+          <span className="font-semibold text-gray-900 dark:text-white">Important Notes & Disclaimers</span>
         </div>
         <svg
-          className={`w-5 h-5 text-gray-500 transition-transform ${expanded ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${expanded ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -34,8 +34,8 @@ export function ImportantNotes() {
         <div className="px-6 pb-4">
           <ul className="space-y-2">
             {notes.map((note, i) => (
-              <li key={i} className="flex gap-2 text-sm text-gray-700">
-                <span className="text-amber-500 mt-0.5 shrink-0">&#8226;</span>
+              <li key={i} className="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <span className="text-amber-500 dark:text-amber-400 mt-0.5 shrink-0">&#8226;</span>
                 <span>{note}</span>
               </li>
             ))}

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-koinx-blue: #0052FE;
   --color-koinx-dark: #0F1629;
@@ -15,6 +17,11 @@
 
 body {
   margin: 0;
-  background: #ffffff;
   font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body,
+body:where(.dark *) {
+  background: #0B0F1A;
 }
