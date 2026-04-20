@@ -1,6 +1,7 @@
 import type { Holding } from '../types';
 import type { CurrencyInfo } from '../context/CurrencyContext';
 import { Checkbox } from './ui/Checkbox';
+import { Tooltip } from './ui/Tooltip';
 import { formatCurrency, formatCurrencyFull, formatCryptoAmount, formatCryptoAmountFull } from '../utils/formatters';
 import { useCurrency } from '../context/CurrencyContext';
 import { useWatchlist } from '../context/WatchlistContext';
@@ -15,14 +16,17 @@ interface Props {
 function GainCell({ gain, balance, currency }: { gain: number; balance: number; currency: CurrencyInfo }) {
   return (
     <td className="py-4 px-3 text-right">
-      <div
-        className={`font-medium cursor-default ${gain > 0 ? 'text-koinx-green' : gain < 0 ? 'text-koinx-red' : 'text-gray-900 dark:text-gray-100'}`}
-        title={formatCurrencyFull(gain, currency)}
-      >
-        {formatCurrency(gain, currency)}
-      </div>
-      <div className="text-xs text-gray-500 dark:text-gray-400 cursor-default" title={formatCryptoAmountFull(balance)}>
-        {formatCryptoAmount(balance)}
+      <Tooltip content={formatCurrencyFull(gain, currency)}>
+        <span className={`font-medium cursor-default ${gain > 0 ? 'text-koinx-green' : gain < 0 ? 'text-koinx-red' : 'text-gray-900 dark:text-gray-100'}`}>
+          {formatCurrency(gain, currency)}
+        </span>
+      </Tooltip>
+      <div>
+        <Tooltip content={formatCryptoAmountFull(balance)}>
+          <span className="text-xs text-gray-500 dark:text-gray-400 cursor-default">
+            {formatCryptoAmount(balance)}
+          </span>
+        </Tooltip>
       </div>
     </td>
   );
@@ -43,7 +47,6 @@ export function HoldingRow({ holding, selected, onToggle, termFilter }: Props) {
           <button
             onClick={() => toggleWatchlist(holding.id)}
             className="text-lg cursor-pointer hover:scale-110 transition-transform shrink-0"
-            title={watched ? 'Remove from watchlist' : 'Add to watchlist'}
           >
             {watched ? '★' : '☆'}
           </button>
@@ -57,31 +60,34 @@ export function HoldingRow({ holding, selected, onToggle, termFilter }: Props) {
           />
           <div className="min-w-0">
             <div className="font-medium text-gray-900 dark:text-white">{holding.coin}</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 max-w-[120px] truncate" title={holding.coinName}>{holding.coinName}</div>
+            <Tooltip content={holding.coinName}>
+              <span className="text-xs text-gray-500 dark:text-gray-400 block max-w-[120px] truncate cursor-default">
+                {holding.coinName}
+              </span>
+            </Tooltip>
           </div>
         </div>
       </td>
       <td className="py-4 px-3 text-right">
-        <div
-          className="font-medium text-gray-900 dark:text-white cursor-default"
-          title={formatCryptoAmountFull(holding.totalHolding)}
-        >
-          {formatCryptoAmount(holding.totalHolding)}
-        </div>
-        <div
-          className="text-xs text-gray-500 dark:text-gray-400 cursor-default"
-          title={formatCurrencyFull(holding.averageBuyPrice, currency)}
-        >
-          {formatCurrency(holding.averageBuyPrice, currency)}
+        <Tooltip content={formatCryptoAmountFull(holding.totalHolding)}>
+          <span className="font-medium text-gray-900 dark:text-white cursor-default">
+            {formatCryptoAmount(holding.totalHolding)}
+          </span>
+        </Tooltip>
+        <div>
+          <Tooltip content={formatCurrencyFull(holding.averageBuyPrice, currency)}>
+            <span className="text-xs text-gray-500 dark:text-gray-400 cursor-default">
+              {formatCurrency(holding.averageBuyPrice, currency)}
+            </span>
+          </Tooltip>
         </div>
       </td>
       <td className="py-4 px-3 text-right">
-        <span
-          className="font-medium text-gray-900 dark:text-white cursor-default"
-          title={formatCurrencyFull(holding.currentPrice, currency)}
-        >
-          {formatCurrency(holding.currentPrice, currency)}
-        </span>
+        <Tooltip content={formatCurrencyFull(holding.currentPrice, currency)}>
+          <span className="font-medium text-gray-900 dark:text-white cursor-default">
+            {formatCurrency(holding.currentPrice, currency)}
+          </span>
+        </Tooltip>
       </td>
       {(termFilter === 'all' || termFilter === 'short') && (
         <GainCell gain={holding.stcg.gain} balance={holding.stcg.balance} currency={currency} />
@@ -90,12 +96,15 @@ export function HoldingRow({ holding, selected, onToggle, termFilter }: Props) {
         <GainCell gain={holding.ltcg.gain} balance={holding.ltcg.balance} currency={currency} />
       )}
       <td className="py-4 px-3 text-right">
-        <span
-          className="font-medium text-gray-900 dark:text-white cursor-default"
-          title={selected ? formatCryptoAmountFull(holding.totalHolding) : undefined}
-        >
-          {selected ? formatCryptoAmount(holding.totalHolding) : '-'}
-        </span>
+        {selected ? (
+          <Tooltip content={formatCryptoAmountFull(holding.totalHolding)}>
+            <span className="font-medium text-gray-900 dark:text-white cursor-default">
+              {formatCryptoAmount(holding.totalHolding)}
+            </span>
+          </Tooltip>
+        ) : (
+          <span className="font-medium text-gray-900 dark:text-white">-</span>
+        )}
       </td>
     </tr>
   );

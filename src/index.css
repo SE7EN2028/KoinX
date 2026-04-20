@@ -34,3 +34,12 @@ body:where(.dark *) {
 .animate-slide-up {
   animation: slide-up 0.3s ease-out;
 }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.15s ease-out;
+}
