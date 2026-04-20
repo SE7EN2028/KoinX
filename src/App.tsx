@@ -13,6 +13,7 @@ import { ImportantNotes } from './components/ImportantNotes';
 import { ExportButtons } from './components/ExportButtons';
 import { CardSkeleton, TableSkeleton } from './components/ui/Skeleton';
 import { ErrorState } from './components/ui/ErrorState';
+import { HowItWorks } from './components/HowItWorks';
 import { ToastContainer } from './components/ui/Toast';
 
 function AppContent() {
@@ -39,6 +40,11 @@ function AppContent() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-1 w-full">
+        <div className="flex items-center gap-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Tax Optimisation</h2>
+          <HowItWorks />
+        </div>
+
         <ImportantNotes />
 
         {error ? (
