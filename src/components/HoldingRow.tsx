@@ -1,6 +1,8 @@
 import type { Holding } from '../types';
+import type { CurrencyInfo } from '../context/CurrencyContext';
 import { Checkbox } from './ui/Checkbox';
 import { formatCurrency, formatCryptoAmount } from '../utils/formatters';
+import { useCurrency } from '../context/CurrencyContext';
 
 interface Props {
   holding: Holding;
@@ -9,11 +11,11 @@ interface Props {
   termFilter: 'all' | 'short' | 'long';
 }
 
-function GainCell({ gain, balance }: { gain: number; balance: number }) {
+function GainCell({ gain, balance, currency }: { gain: number; balance: number; currency: CurrencyInfo }) {
   return (
     <td className="py-4 px-3 text-right">
       <div className={`font-medium ${gain > 0 ? 'text-koinx-green' : gain < 0 ? 'text-koinx-red' : 'text-gray-900 dark:text-gray-100'}`}>
-        {formatCurrency(gain)}
+        {formatCurrency(gain, currency)}
       </div>
       <div className="text-xs text-gray-500 dark:text-gray-400">{formatCryptoAmount(balance)}</div>
     </td>
@@ -21,6 +23,8 @@ function GainCell({ gain, balance }: { gain: number; balance: number }) {
 }
 
 export function HoldingRow({ holding, selected, onToggle, termFilter }: Props) {
+  const { currency } = useCurrency();
+
   return (
     <tr className={`border-t border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors ${selected ? 'bg-blue-50/50 dark:bg-blue-900/15' : ''}`}>
       <td className="py-4 px-3">
@@ -38,22 +42,22 @@ export function HoldingRow({ holding, selected, onToggle, termFilter }: Props) {
           />
           <div>
             <div className="font-medium text-gray-900 dark:text-white">{holding.coin}</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">{holding.coinName}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 max-w-[120px] truncate">{holding.coinName}</div>
           </div>
         </div>
       </td>
       <td className="py-4 px-3 text-right">
         <div className="font-medium text-gray-900 dark:text-white">{formatCryptoAmount(holding.totalHolding)}</div>
-        <div className="text-xs text-gray-500 dark:text-gray-400">{formatCurrency(holding.averageBuyPrice)}</div>
+        <div className="text-xs text-gray-500 dark:text-gray-400">{formatCurrency(holding.averageBuyPrice, currency)}</div>
       </td>
       <td className="py-4 px-3 text-right font-medium text-gray-900 dark:text-white">
-        {formatCurrency(holding.currentPrice)}
+        {formatCurrency(holding.currentPrice, currency)}
       </td>
       {(termFilter === 'all' || termFilter === 'short') && (
-        <GainCell gain={holding.stcg.gain} balance={holding.stcg.balance} />
+        <GainCell gain={holding.stcg.gain} balance={holding.stcg.balance} currency={currency} />
       )}
       {(termFilter === 'all' || termFilter === 'long') && (
-        <GainCell gain={holding.ltcg.gain} balance={holding.ltcg.balance} />
+        <GainCell gain={holding.ltcg.gain} balance={holding.ltcg.balance} currency={currency} />
       )}
       <td className="py-4 px-3 text-right font-medium text-gray-900 dark:text-white">
         {selected ? formatCryptoAmount(holding.totalHolding) : '-'}

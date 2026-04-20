@@ -2,12 +2,14 @@ import type { CapitalGains } from '../types';
 import { Card } from './ui/Card';
 import { formatCurrency } from '../utils/formatters';
 import { getRealisedGains } from '../utils/calculations';
+import { useCurrency } from '../context/CurrencyContext';
 
 interface Props {
   capitalGains: CapitalGains;
 }
 
 export function PreHarvestingCard({ capitalGains }: Props) {
+  const { currency } = useCurrency();
   const netStcg = capitalGains.stcg.profits - capitalGains.stcg.losses;
   const netLtcg = capitalGains.ltcg.profits - capitalGains.ltcg.losses;
   const realisedGains = getRealisedGains(capitalGains);
@@ -26,21 +28,21 @@ export function PreHarvestingCard({ capitalGains }: Props) {
         <tbody>
           <tr className="border-t border-gray-700">
             <td className="py-3 text-gray-300">Profits</td>
-            <td className="py-3 text-right">{formatCurrency(capitalGains.stcg.profits)}</td>
-            <td className="py-3 text-right">{formatCurrency(capitalGains.ltcg.profits)}</td>
+            <td className="py-3 text-right">{formatCurrency(capitalGains.stcg.profits, currency)}</td>
+            <td className="py-3 text-right">{formatCurrency(capitalGains.ltcg.profits, currency)}</td>
           </tr>
           <tr className="border-t border-gray-700">
             <td className="py-3 text-gray-300">Losses</td>
-            <td className="py-3 text-right">{formatCurrency(capitalGains.stcg.losses)}</td>
-            <td className="py-3 text-right">{formatCurrency(capitalGains.ltcg.losses)}</td>
+            <td className="py-3 text-right">{formatCurrency(capitalGains.stcg.losses, currency)}</td>
+            <td className="py-3 text-right">{formatCurrency(capitalGains.ltcg.losses, currency)}</td>
           </tr>
           <tr className="border-t border-gray-700">
             <td className="py-3 text-gray-300 font-medium">Net Capital Gains</td>
             <td className={`py-3 text-right font-medium ${netStcg >= 0 ? 'text-koinx-green' : 'text-koinx-red'}`}>
-              {formatCurrency(netStcg)}
+              {formatCurrency(netStcg, currency)}
             </td>
             <td className={`py-3 text-right font-medium ${netLtcg >= 0 ? 'text-koinx-green' : 'text-koinx-red'}`}>
-              {formatCurrency(netLtcg)}
+              {formatCurrency(netLtcg, currency)}
             </td>
           </tr>
         </tbody>
@@ -49,7 +51,7 @@ export function PreHarvestingCard({ capitalGains }: Props) {
         <div className="flex justify-between items-center">
           <span className="text-gray-300">Realised Capital Gains</span>
           <span className={`text-xl font-bold ${realisedGains >= 0 ? 'text-koinx-green' : 'text-koinx-red'}`}>
-            {formatCurrency(realisedGains)}
+            {formatCurrency(realisedGains, currency)}
           </span>
         </div>
       </div>

@@ -1,18 +1,23 @@
-export function formatCurrency(value: number): string {
-  const absValue = Math.abs(value);
-  const sign = value < 0 ? '-' : '';
+import type { CurrencyInfo } from '../context/CurrencyContext';
+
+export function formatCurrency(value: number, currency?: CurrencyInfo): string {
+  const rate = currency?.rate ?? 1;
+  const symbol = currency?.symbol ?? '₹';
+  const converted = value * rate;
+  const absValue = Math.abs(converted);
+  const sign = converted < 0 ? '-' : '';
 
   if (absValue < 0.01 && absValue > 0) {
-    return `${sign}₹${absValue.toFixed(6)}`;
+    return `${sign}${symbol}${absValue.toFixed(6)}`;
   }
   if (absValue >= 10000000) {
-    return `${sign}₹${(absValue / 10000000).toFixed(2)}Cr`;
+    return `${sign}${symbol}${(absValue / 10000000).toFixed(2)}Cr`;
   }
   if (absValue >= 100000) {
-    return `${sign}₹${(absValue / 100000).toFixed(2)}L`;
+    return `${sign}${symbol}${(absValue / 100000).toFixed(2)}L`;
   }
 
-  return `${sign}₹${absValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `${sign}${symbol}${absValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 export function formatCryptoAmount(value: number): string {
@@ -30,8 +35,8 @@ export function formatCryptoAmount(value: number): string {
   return absValue.toLocaleString('en-IN', { maximumFractionDigits: 4 });
 }
 
-export function formatGain(value: number): string {
-  const formatted = formatCurrency(Math.abs(value));
+export function formatGain(value: number, currency?: CurrencyInfo): string {
+  const formatted = formatCurrency(Math.abs(value), currency);
   if (value > 0) return formatted;
   if (value < 0) return `-${formatted}`;
   return formatted;
