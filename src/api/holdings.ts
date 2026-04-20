@@ -1,0 +1,111 @@
+import type { Holding } from '../types';
+
+const mockHoldings: Holding[] = [
+  {
+    coin: 'BTC',
+    coinName: 'Bitcoin',
+    logo: 'https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png',
+    totalHolding: 0.5,
+    avgBuyPrice: 2500000,
+    currentPrice: 6300000,
+    stcg: { gain: 800000, balance: 0.2 },
+    ltcg: { gain: 1100000, balance: 0.3 },
+  },
+  {
+    coin: 'ETH',
+    coinName: 'Ethereum',
+    logo: 'https://coin-images.coingecko.com/coins/images/279/large/ethereum.png',
+    totalHolding: 5.0,
+    avgBuyPrice: 150000,
+    currentPrice: 210000,
+    stcg: { gain: 120000, balance: 2.0 },
+    ltcg: { gain: 180000, balance: 3.0 },
+  },
+  {
+    coin: 'SOL',
+    coinName: 'Solana',
+    logo: 'https://coin-images.coingecko.com/coins/images/4128/large/solana.png',
+    totalHolding: 50,
+    avgBuyPrice: 8500,
+    currentPrice: 11200,
+    stcg: { gain: -45000, balance: 20 },
+    ltcg: { gain: 90000, balance: 30 },
+  },
+  {
+    coin: 'DOGE',
+    coinName: 'Dogecoin',
+    logo: 'https://coin-images.coingecko.com/coins/images/5/large/dogecoin.png',
+    totalHolding: 10000,
+    avgBuyPrice: 12,
+    currentPrice: 8.5,
+    stcg: { gain: -15000, balance: 4000 },
+    ltcg: { gain: -20000, balance: 6000 },
+  },
+  {
+    coin: 'XRP',
+    coinName: 'Ripple',
+    logo: 'https://coin-images.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png',
+    totalHolding: 2000,
+    avgBuyPrice: 45,
+    currentPrice: 55,
+    stcg: { gain: 8000, balance: 800 },
+    ltcg: { gain: 12000, balance: 1200 },
+  },
+  {
+    coin: 'ADA',
+    coinName: 'Cardano',
+    logo: 'https://coin-images.coingecko.com/coins/images/975/large/cardano.png',
+    totalHolding: 5000,
+    avgBuyPrice: 35,
+    currentPrice: 28,
+    stcg: { gain: -15000, balance: 2000 },
+    ltcg: { gain: -20000, balance: 3000 },
+  },
+  {
+    coin: 'MATIC',
+    coinName: 'Polygon',
+    logo: 'https://coin-images.coingecko.com/coins/images/4713/large/polygon.png',
+    totalHolding: 8000,
+    avgBuyPrice: 55,
+    currentPrice: 42,
+    stcg: { gain: -48000, balance: 3000 },
+    ltcg: { gain: -56000, balance: 5000 },
+  },
+  {
+    coin: 'DOT',
+    coinName: 'Polkadot',
+    logo: 'https://coin-images.coingecko.com/coins/images/12171/large/polkadot.png',
+    totalHolding: 300,
+    avgBuyPrice: 420,
+    currentPrice: 510,
+    stcg: { gain: 12000, balance: 120 },
+    ltcg: { gain: 15000, balance: 180 },
+  },
+  {
+    coin: 'SHIB',
+    coinName: 'Shiba Inu',
+    logo: 'https://coin-images.coingecko.com/coins/images/11939/large/shiba.png',
+    totalHolding: 50000000,
+    avgBuyPrice: 0.0008,
+    currentPrice: 0.0012,
+    stcg: { gain: 8000, balance: 20000000 },
+    ltcg: { gain: 12000, balance: 30000000 },
+  },
+  {
+    coin: 'AVAX',
+    coinName: 'Avalanche',
+    logo: 'https://coin-images.coingecko.com/coins/images/12559/large/Avalanche_Circle_RedWhite_Trans.png',
+    totalHolding: 100,
+    avgBuyPrice: 2200,
+    currentPrice: 1800,
+    stcg: { gain: -16000, balance: 40 },
+    ltcg: { gain: -24000, balance: 60 },
+  },
+];
+
+export function fetchHoldings(): Promise<Holding[]> {
+  return new Promise((resolve) => {
+    const delay = 500 + Math.random() * 300;
+    setTimeout(() => resolve(mockHoldings), delay);
+  });
+}
