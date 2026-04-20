@@ -2,6 +2,9 @@ export function formatCurrency(value: number): string {
   const absValue = Math.abs(value);
   const sign = value < 0 ? '-' : '';
 
+  if (absValue < 0.01 && absValue > 0) {
+    return `${sign}₹${absValue.toFixed(6)}`;
+  }
   if (absValue >= 10000000) {
     return `${sign}₹${(absValue / 10000000).toFixed(2)}Cr`;
   }
@@ -9,7 +12,7 @@ export function formatCurrency(value: number): string {
     return `${sign}₹${(absValue / 100000).toFixed(2)}L`;
   }
 
-  return `${sign}₹${absValue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+  return `${sign}₹${absValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 export function formatCryptoAmount(value: number): string {
@@ -18,7 +21,8 @@ export function formatCryptoAmount(value: number): string {
   const absValue = Math.abs(value);
 
   if (absValue < 1e-6) return '~0';
-  if (absValue < 0.001) return absValue.toFixed(6);
+  if (absValue < 0.0001) return absValue.toFixed(8);
+  if (absValue < 0.01) return absValue.toFixed(6);
   if (absValue < 1) return absValue.toFixed(4);
   if (absValue >= 1000000) {
     return absValue.toLocaleString('en-IN', { maximumFractionDigits: 2 });
