@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-koinx-blue: #0052FE;
+  --color-koinx-dark: #0F1629;
+  --color-koinx-card-dark: #1A1F36;
+  --color-koinx-green: #17B26A;
+  --color-koinx-red: #F04438;
+  --color-koinx-border: #E4E4E7;
+  --color-koinx-gray: #6B7280;
+  --color-koinx-light-bg: #F7F7F8;
+  --color-koinx-blue-light: #EEF2FF;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: var(--font-sans);
+}
