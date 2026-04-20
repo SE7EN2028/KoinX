@@ -47,8 +47,9 @@ export function AfterHarvestingCard() {
           <span className="text-xl font-bold">{formatCurrency(realisedGains)}</span>
         </div>
         {savings > 0 && (
-          <div className="mt-3 bg-white/15 rounded-lg px-4 py-2 text-sm">
-            You're going to save <span className="font-bold">{formatCurrency(savings)}</span>
+          <div className="mt-3 bg-white/15 rounded-lg px-4 py-2.5 text-sm flex items-center gap-2">
+            <span>&#127881;</span>
+            <span>You're going to save <span className="font-bold">{formatCurrency(savings)}</span></span>
           </div>
         )}
       </div>
