@@ -1,5 +1,6 @@
 import type { CapitalGains } from '../types';
 import { Card } from './ui/Card';
+import { AnimatedCurrency } from './ui/AnimatedCurrency';
 import { formatCurrency } from '../utils/formatters';
 import { getRealisedGains } from '../utils/calculations';
 import { useCurrency } from '../context/CurrencyContext';
@@ -50,9 +51,10 @@ export function PreHarvestingCard({ capitalGains }: Props) {
       <div className="mt-4 pt-4 border-t border-gray-700">
         <div className="flex justify-between items-center">
           <span className="text-gray-300">Realised Capital Gains</span>
-          <span className={`text-xl font-bold ${realisedGains >= 0 ? 'text-koinx-green' : 'text-koinx-red'}`}>
-            {formatCurrency(realisedGains, currency)}
-          </span>
+          <AnimatedCurrency
+            value={realisedGains}
+            className={`text-xl font-bold ${realisedGains >= 0 ? 'text-koinx-green' : 'text-koinx-red'}`}
+          />
         </div>
       </div>
     </Card>
