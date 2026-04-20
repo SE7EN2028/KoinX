@@ -2,12 +2,12 @@ import type { CapitalGains } from '../types';
 
 const mockCapitalGains: CapitalGains = {
   stcg: {
-    profits: 948000,
-    losses: 139000,
+    profits: 70200.88,
+    losses: 1548.53,
   },
   ltcg: {
-    profits: 1409000,
-    losses: 120000,
+    profits: 5020,
+    losses: 3050,
   },
 };
 

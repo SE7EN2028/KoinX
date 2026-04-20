@@ -6,6 +6,7 @@ interface Props {
   holding: Holding;
   selected: boolean;
   onToggle: () => void;
+  termFilter: 'all' | 'short' | 'long';
 }
 
 function GainCell({ gain, balance }: { gain: number; balance: number }) {
@@ -19,7 +20,7 @@ function GainCell({ gain, balance }: { gain: number; balance: number }) {
   );
 }
 
-export function HoldingRow({ holding, selected, onToggle }: Props) {
+export function HoldingRow({ holding, selected, onToggle, termFilter }: Props) {
   return (
     <tr className={`border-t border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors ${selected ? 'bg-blue-50/50 dark:bg-blue-900/15' : ''}`}>
       <td className="py-4 px-3">
@@ -43,13 +44,17 @@ export function HoldingRow({ holding, selected, onToggle }: Props) {
       </td>
       <td className="py-4 px-3 text-right">
         <div className="font-medium text-gray-900 dark:text-white">{formatCryptoAmount(holding.totalHolding)}</div>
-        <div className="text-xs text-gray-500 dark:text-gray-400">{formatCurrency(holding.avgBuyPrice)}</div>
+        <div className="text-xs text-gray-500 dark:text-gray-400">{formatCurrency(holding.averageBuyPrice)}</div>
       </td>
       <td className="py-4 px-3 text-right font-medium text-gray-900 dark:text-white">
         {formatCurrency(holding.currentPrice)}
       </td>
-      <GainCell gain={holding.stcg.gain} balance={holding.stcg.balance} />
-      <GainCell gain={holding.ltcg.gain} balance={holding.ltcg.balance} />
+      {(termFilter === 'all' || termFilter === 'short') && (
+        <GainCell gain={holding.stcg.gain} balance={holding.stcg.balance} />
+      )}
+      {(termFilter === 'all' || termFilter === 'long') && (
+        <GainCell gain={holding.ltcg.gain} balance={holding.ltcg.balance} />
+      )}
       <td className="py-4 px-3 text-right font-medium text-gray-900 dark:text-white">
         {selected ? formatCryptoAmount(holding.totalHolding) : '-'}
       </td>

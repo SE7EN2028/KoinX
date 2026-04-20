@@ -7,9 +7,9 @@ export interface Holding {
   coin: string;
   coinName: string;
   logo: string;
-  totalHolding: number;
-  avgBuyPrice: number;
   currentPrice: number;
+  totalHolding: number;
+  averageBuyPrice: number;
   stcg: StcgLtcg;
   ltcg: StcgLtcg;
 }
