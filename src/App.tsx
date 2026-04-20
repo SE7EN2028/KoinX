@@ -3,14 +3,17 @@ import { useCapitalGains } from './hooks/useCapitalGains';
 import { HarvestingProvider } from './context/HarvestingContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { CurrencyProvider } from './context/CurrencyContext';
+import { WatchlistProvider } from './context/WatchlistContext';
 import { ThemeToggle } from './components/ThemeToggle';
 import { CurrencySelector } from './components/CurrencySelector';
 import { PreHarvestingCard } from './components/PreHarvestingCard';
 import { AfterHarvestingCard } from './components/AfterHarvestingCard';
 import { HoldingsTable } from './components/HoldingsTable';
 import { ImportantNotes } from './components/ImportantNotes';
+import { ExportButtons } from './components/ExportButtons';
 import { CardSkeleton, TableSkeleton } from './components/ui/Skeleton';
 import { ErrorState } from './components/ui/ErrorState';
+import { ToastContainer } from './components/ui/Toast';
 
 function AppContent() {
   const { holdings, loading: holdingsLoading, error: holdingsError, retry: retryHoldings } = useHoldings();
@@ -57,7 +60,10 @@ function AppContent() {
                   <AfterHarvestingCard />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Holdings</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Holdings</h2>
+                    {capitalGains && <ExportButtons holdings={holdings} preGains={capitalGains} />}
+                  </div>
                   <HoldingsTable holdings={holdings} />
                 </div>
               </>
@@ -71,6 +77,8 @@ function AppContent() {
           KoinX — Tax Loss Harvesting Tool
         </div>
       </footer>
+
+      <ToastContainer />
     </div>
   );
 }
@@ -79,7 +87,9 @@ function App() {
   return (
     <ThemeProvider>
       <CurrencyProvider>
-        <AppContent />
+        <WatchlistProvider>
+          <AppContent />
+        </WatchlistProvider>
       </CurrencyProvider>
     </ThemeProvider>
   );
