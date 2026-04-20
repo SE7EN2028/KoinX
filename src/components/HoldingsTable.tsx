@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Holding } from '../types';
 import { useHarvesting } from '../context/HarvestingContext';
+import { useWatchlist } from '../context/WatchlistContext';
 import { HoldingRow } from './HoldingRow';
 import { Checkbox } from './ui/Checkbox';
 
@@ -15,9 +16,12 @@ const INITIAL_VISIBLE = 5;
 export function HoldingsTable({ holdings }: Props) {
   const [showAll, setShowAll] = useState(false);
   const [termFilter, setTermFilter] = useState<TermFilter>('all');
+  const [watchlistOnly, setWatchlistOnly] = useState(false);
   const { selectedHoldings, toggleHolding, toggleAll } = useHarvesting();
+  const { watchlist } = useWatchlist();
 
   const filteredHoldings = holdings.filter((h) => {
+    if (watchlistOnly && !watchlist.has(h.coin)) return false;
     if (termFilter === 'short') return h.stcg.gain !== 0 || h.stcg.balance > 0;
     if (termFilter === 'long') return h.ltcg.gain !== 0 || h.ltcg.balance > 0;
     return true;
@@ -49,6 +53,18 @@ export function HoldingsTable({ holdings }: Props) {
             {tab.label}
           </button>
         ))}
+        <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
+        <button
+          onClick={() => { setWatchlistOnly(!watchlistOnly); setShowAll(false); }}
+          className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+            watchlistOnly
+              ? 'bg-amber-500 text-white'
+              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5'
+          }`}
+        >
+          <span>★</span>
+          <span>Watchlist{watchlist.size > 0 ? ` (${watchlist.size})` : ''}</span>
+        </button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm min-w-[800px]">
@@ -74,15 +90,23 @@ export function HoldingsTable({ holdings }: Props) {
             </tr>
           </thead>
           <tbody>
-            {visibleHoldings.map((holding) => (
-              <HoldingRow
-                key={holding.coin}
-                holding={holding}
-                selected={selectedHoldings.has(holding.coin)}
-                onToggle={() => toggleHolding(holding.coin)}
-                termFilter={termFilter}
-              />
-            ))}
+            {visibleHoldings.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="py-12 text-center text-gray-500 dark:text-gray-400">
+                  {watchlistOnly ? 'No watchlisted holdings. Star some assets to see them here.' : 'No holdings match this filter.'}
+                </td>
+              </tr>
+            ) : (
+              visibleHoldings.map((holding) => (
+                <HoldingRow
+                  key={holding.coin}
+                  holding={holding}
+                  selected={selectedHoldings.has(holding.coin)}
+                  onToggle={() => toggleHolding(holding.coin)}
+                  termFilter={termFilter}
+                />
+              ))
+            )}
           </tbody>
         </table>
       </div>
