@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { Holding } from '../types';
 import { useHarvesting } from '../context/HarvestingContext';
 import { useWatchlist } from '../context/WatchlistContext';
@@ -6,6 +6,8 @@ import { HoldingRow } from './HoldingRow';
 import { Checkbox } from './ui/Checkbox';
 
 type TermFilter = 'all' | 'short' | 'long';
+type SortKey = 'coin' | 'holding' | 'price' | 'stcg' | 'ltcg';
+type SortDir = 'asc' | 'desc';
 
 interface Props {
   holdings: Holding[];
@@ -13,12 +15,31 @@ interface Props {
 
 const INITIAL_VISIBLE = 5;
 
+function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
+  return (
+    <span className={`inline-block ml-1 transition-colors ${active ? 'text-koinx-blue' : 'text-gray-400 dark:text-gray-600'}`}>
+      {active ? (dir === 'asc' ? '▲' : '▼') : '⇅'}
+    </span>
+  );
+}
+
 export function HoldingsTable({ holdings }: Props) {
   const [showAll, setShowAll] = useState(false);
   const [termFilter, setTermFilter] = useState<TermFilter>('all');
   const [watchlistOnly, setWatchlistOnly] = useState(false);
+  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>('desc');
   const { selectedHoldings, toggleHolding, toggleAll } = useHarvesting();
   const { watchlist } = useWatchlist();
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortDir('desc');
+    }
+  };
 
   const filteredHoldings = holdings.filter((h) => {
     if (watchlistOnly && !watchlist.has(h.id)) return false;
@@ -27,7 +48,26 @@ export function HoldingsTable({ holdings }: Props) {
     return true;
   });
 
-  const visibleHoldings = showAll ? filteredHoldings : filteredHoldings.slice(0, INITIAL_VISIBLE);
+  const sortedHoldings = useMemo(() => {
+    if (!sortKey) return filteredHoldings;
+    const sorted = [...filteredHoldings].sort((a, b) => {
+      let va: number | string = 0;
+      let vb: number | string = 0;
+      switch (sortKey) {
+        case 'coin': va = a.coin.toLowerCase(); vb = b.coin.toLowerCase(); break;
+        case 'holding': va = a.totalHolding * a.currentPrice; vb = b.totalHolding * b.currentPrice; break;
+        case 'price': va = a.currentPrice; vb = b.currentPrice; break;
+        case 'stcg': va = a.stcg.gain; vb = b.stcg.gain; break;
+        case 'ltcg': va = a.ltcg.gain; vb = b.ltcg.gain; break;
+      }
+      if (va < vb) return sortDir === 'asc' ? -1 : 1;
+      if (va > vb) return sortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+    return sorted;
+  }, [filteredHoldings, sortKey, sortDir]);
+
+  const visibleHoldings = showAll ? sortedHoldings : sortedHoldings.slice(0, INITIAL_VISIBLE);
   const allSelected = holdings.length > 0 && selectedHoldings.size === holdings.length;
   const someSelected = selectedHoldings.size > 0 && !allSelected;
 
@@ -36,6 +76,8 @@ export function HoldingsTable({ holdings }: Props) {
     { key: 'short', label: 'Short Term' },
     { key: 'long', label: 'Long Term' },
   ];
+
+  const thClass = "py-3 px-3 text-right cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-200 transition-colors";
 
   return (
     <div className="bg-white dark:bg-[#131829] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden transition-colors duration-300">
@@ -77,14 +119,24 @@ export function HoldingsTable({ holdings }: Props) {
                   onChange={() => toggleAll(holdings)}
                 />
               </th>
-              <th className="py-3 px-3 text-left">Asset</th>
-              <th className="py-3 px-3 text-right">Holdings</th>
-              <th className="py-3 px-3 text-right">Current Price</th>
+              <th className="py-3 px-3 text-left cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-200 transition-colors" onClick={() => handleSort('coin')}>
+                Asset<SortIcon active={sortKey === 'coin'} dir={sortDir} />
+              </th>
+              <th className={thClass} onClick={() => handleSort('holding')}>
+                Holdings<SortIcon active={sortKey === 'holding'} dir={sortDir} />
+              </th>
+              <th className={thClass} onClick={() => handleSort('price')}>
+                Current Price<SortIcon active={sortKey === 'price'} dir={sortDir} />
+              </th>
               {(termFilter === 'all' || termFilter === 'short') && (
-                <th className="py-3 px-3 text-right">Short Term</th>
+                <th className={thClass} onClick={() => handleSort('stcg')}>
+                  Short Term<SortIcon active={sortKey === 'stcg'} dir={sortDir} />
+                </th>
               )}
               {(termFilter === 'all' || termFilter === 'long') && (
-                <th className="py-3 px-3 text-right">Long Term</th>
+                <th className={thClass} onClick={() => handleSort('ltcg')}>
+                  Long Term<SortIcon active={sortKey === 'ltcg'} dir={sortDir} />
+                </th>
               )}
               <th className="py-3 px-3 text-right">Amount to Sell</th>
             </tr>
@@ -110,13 +162,13 @@ export function HoldingsTable({ holdings }: Props) {
           </tbody>
         </table>
       </div>
-      {filteredHoldings.length > INITIAL_VISIBLE && (
+      {sortedHoldings.length > INITIAL_VISIBLE && (
         <div className="border-t border-gray-200 dark:border-gray-800 px-4 py-3 text-center">
           <button
             onClick={() => setShowAll(!showAll)}
             className="text-koinx-blue text-sm font-medium hover:underline cursor-pointer"
           >
-            {showAll ? 'View Less' : `View All (${filteredHoldings.length})`}
+            {showAll ? 'View Less' : `View All (${sortedHoldings.length})`}
           </button>
         </div>
       )}
