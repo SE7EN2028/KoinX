@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useCurrency } from '../context/CurrencyContext';
+import { Tooltip } from './ui/Tooltip';
 
 export function CurrencySelector() {
   const { currency, setCurrency, currencies } = useCurrency();
@@ -16,6 +17,7 @@ export function CurrencySelector() {
 
   return (
     <div ref={ref} className="relative">
+      <Tooltip content="Prototype only — rates are approximate and don't update in real time" position="bottom">
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1F36] text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
@@ -26,6 +28,7 @@ export function CurrencySelector() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
+      </Tooltip>
 
       {open && (
         <div className="absolute right-0 top-full mt-1 w-56 bg-white dark:bg-[#1A1F36] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50 py-1 max-h-72 overflow-y-auto">
