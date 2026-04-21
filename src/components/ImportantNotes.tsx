@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const notes = [
   'Tax-loss harvesting is currently not allowed under Indian tax regulations for crypto assets. This tool is for educational and illustrative purposes only.',
@@ -10,6 +10,14 @@ const notes = [
 
 export function ImportantNotes() {
   const [expanded, setExpanded] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setHeight(contentRef.current.scrollHeight);
+    }
+  }, [expanded]);
 
   return (
     <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-xl overflow-hidden transition-colors duration-300">
@@ -22,7 +30,7 @@ export function ImportantNotes() {
           <span className="font-semibold text-gray-900 dark:text-white">Important Notes & Disclaimers</span>
         </div>
         <svg
-          className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${expanded ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -30,18 +38,27 @@ export function ImportantNotes() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {expanded && (
-        <div className="px-6 pb-4">
+      <div
+        className="transition-all duration-300 ease-in-out overflow-hidden"
+        style={{ maxHeight: expanded ? `${height}px` : '0px', opacity: expanded ? 1 : 0 }}
+      >
+        <div ref={contentRef} className="px-6 pb-4">
           <ul className="space-y-2">
             {notes.map((note, i) => (
-              <li key={i} className="flex gap-2 text-sm text-gray-700 dark:text-gray-300">
+              <li
+                key={i}
+                className="flex gap-2 text-sm text-gray-700 dark:text-gray-300"
+                style={{
+                  animation: expanded ? `fade-slide-in 0.3s ease-out ${i * 0.06}s both` : 'none',
+                }}
+              >
                 <span className="text-amber-500 dark:text-amber-400 mt-0.5 shrink-0">&#8226;</span>
                 <span>{note}</span>
               </li>
             ))}
           </ul>
         </div>
-      )}
+      </div>
     </div>
   );
 }
