@@ -29,6 +29,8 @@ export function HoldingsTable({ holdings }: Props) {
   const [watchlistOnly, setWatchlistOnly] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>('desc');
+  const [search, setSearch] = useState('');
+  const [searchExpanded, setSearchExpanded] = useState(false);
   const { selectedHoldings, toggleHolding, toggleAll } = useHarvesting();
   const { watchlist } = useWatchlist();
 
@@ -42,6 +44,10 @@ export function HoldingsTable({ holdings }: Props) {
   };
 
   const filteredHoldings = holdings.filter((h) => {
+    if (search) {
+      const q = search.toLowerCase();
+      if (!h.coin.toLowerCase().includes(q) && !h.coinName.toLowerCase().includes(q)) return false;
+    }
     if (watchlistOnly && !watchlist.has(h.id)) return false;
     if (termFilter === 'short') return h.stcg.gain !== 0 || h.stcg.balance > 0;
     if (termFilter === 'long') return h.ltcg.gain !== 0 || h.ltcg.balance > 0;
@@ -107,6 +113,36 @@ export function HoldingsTable({ holdings }: Props) {
           <span>★</span>
           <span>Watchlist{watchlist.size > 0 ? ` (${watchlist.size})` : ''}</span>
         </button>
+        <div className="ml-auto flex items-center">
+          <div
+            className="flex items-center"
+            onMouseEnter={() => setSearchExpanded(true)}
+            onMouseLeave={() => { if (!search) setSearchExpanded(false); }}
+          >
+            <div className={`flex items-center rounded-lg border transition-all duration-300 overflow-hidden ${
+              searchExpanded
+                ? 'w-52 border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1F36]'
+                : 'w-8 border-transparent'
+            }`}>
+              <div className="shrink-0 w-8 h-8 flex items-center justify-center cursor-pointer text-gray-500 dark:text-gray-400 hover:text-koinx-blue transition-colors"
+                onClick={() => setSearchExpanded(true)}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); setShowAll(false); }}
+                placeholder="Search for your assets"
+                className={`bg-transparent text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none transition-all duration-300 ${
+                  searchExpanded ? 'w-full pr-3 py-1.5' : 'w-0 p-0'
+                }`}
+              />
+            </div>
+          </div>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm min-w-[800px]">
