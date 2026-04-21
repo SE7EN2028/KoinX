@@ -31,6 +31,7 @@ export function HoldingsTable({ holdings }: Props) {
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [search, setSearch] = useState('');
   const [searchExpanded, setSearchExpanded] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
   const { selectedHoldings, toggleHolding, toggleAll } = useHarvesting();
   const { watchlist } = useWatchlist();
 
@@ -117,7 +118,7 @@ export function HoldingsTable({ holdings }: Props) {
           <div
             className="flex items-center"
             onMouseEnter={() => setSearchExpanded(true)}
-            onMouseLeave={() => { if (!search) setSearchExpanded(false); }}
+            onMouseLeave={() => { if (!search && !searchFocused) setSearchExpanded(false); }}
           >
             <div className={`flex items-center rounded-lg border transition-all duration-300 overflow-hidden ${
               searchExpanded
@@ -135,6 +136,8 @@ export function HoldingsTable({ holdings }: Props) {
                 type="text"
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setShowAll(false); }}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => { setSearchFocused(false); if (!search) setSearchExpanded(false); }}
                 placeholder="Search for your assets"
                 className={`bg-transparent text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none transition-all duration-300 ${
                   searchExpanded ? 'w-full pr-3 py-1.5' : 'w-0 p-0'
