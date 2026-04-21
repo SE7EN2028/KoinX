@@ -26,7 +26,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-[#F0F3F8] dark:bg-[#0B0F1A] transition-colors duration-300 flex flex-col">
-      <header className="bg-white dark:bg-[#131829] border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+      <header className="bg-white dark:bg-[#131829] border-b border-gray-200 dark:border-gray-800 transition-colors duration-300 animate-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
           <KoinXLogo className="h-6 sm:h-7 w-auto" />
           <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">Tax Loss Harvesting</span>
@@ -63,7 +63,7 @@ function AppContent() {
                   {capitalGains && <PreHarvestingCard capitalGains={capitalGains} />}
                   <AfterHarvestingCard />
                 </div>
-                <div>
+                <div style={{ animation: 'float-in 0.6s ease-out 0.2s both' }}>
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Holdings</h2>
                     {capitalGains && <ExportButtons holdings={holdings} preGains={capitalGains} />}

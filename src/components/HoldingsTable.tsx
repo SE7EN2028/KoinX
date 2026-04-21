@@ -185,13 +185,14 @@ export function HoldingsTable({ holdings }: Props) {
                 </td>
               </tr>
             ) : (
-              visibleHoldings.map((holding) => (
+              visibleHoldings.map((holding, i) => (
                 <HoldingRow
                   key={holding.id}
                   holding={holding}
                   selected={selectedHoldings.has(holding.id)}
                   onToggle={() => toggleHolding(holding.id)}
                   termFilter={termFilter}
+                  animationDelay={i * 0.04}
                 />
               ))
             )}

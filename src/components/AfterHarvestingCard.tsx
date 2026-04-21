@@ -81,7 +81,7 @@ export function AfterHarvestingCard() {
           <AnimatedCurrency value={realisedGains} className="text-xl font-bold" />
         </div>
         {savings > 0 && (
-          <div className="mt-3 bg-white/15 rounded-lg px-4 py-2.5 text-sm flex items-center gap-2">
+          <div className="mt-3 bg-white/15 rounded-lg px-4 py-2.5 text-sm flex items-center gap-2 animate-savings-pulse">
             <span>&#127881;</span>
             <span>You're going to save <AnimatedCurrency value={savings} className="font-bold" /></span>
           </div>

@@ -11,6 +11,7 @@ interface Props {
   selected: boolean;
   onToggle: () => void;
   termFilter: 'all' | 'short' | 'long';
+  animationDelay?: number;
 }
 
 function GainCell({ gain, balance, currency }: { gain: number; balance: number; currency: CurrencyInfo }) {
@@ -32,13 +33,16 @@ function GainCell({ gain, balance, currency }: { gain: number; balance: number; 
   );
 }
 
-export function HoldingRow({ holding, selected, onToggle, termFilter }: Props) {
+export function HoldingRow({ holding, selected, onToggle, termFilter, animationDelay = 0 }: Props) {
   const { currency } = useCurrency();
   const { isWatched, toggleWatchlist } = useWatchlist();
   const watched = isWatched(holding.id);
 
   return (
-    <tr className={`border-t border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors ${selected ? 'bg-blue-50/50 dark:bg-blue-900/15' : ''}`}>
+    <tr
+      className={`border-t border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors ${selected ? 'bg-blue-50/50 dark:bg-blue-900/15' : ''}`}
+      style={{ animation: `row-enter 0.3s ease-out ${animationDelay}s both` }}
+    >
       <td className="py-4 px-3">
         <Checkbox checked={selected} onChange={onToggle} />
       </td>
